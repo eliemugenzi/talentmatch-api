@@ -5,6 +5,7 @@ import jsonResponse from 'helpers/jsonResponse';
 import * as statusCodes from 'constants/statusCodes';
 import Job from 'models/Job';
 import Application from 'models/Application';
+import User from 'models/User';
 
 export const createJob = asyncHandler(async (req: Request, res: Response) => {
   const { body } = req;
@@ -106,6 +107,58 @@ export const getOne = asyncHandler(async (req: any, res: Response): Promise<Resp
     status: statusCodes.OK,
     data: {
       ...job.get(),
+    },
+  });
+});
+
+export const applyJob = asyncHandler(async (req: any, res: Response) => {
+  const { body, job } = req;
+
+  let user = await User.findOne({
+    where: {
+      email: body.email,
+    },
+  });
+
+  if (!user) {
+    user = await User.create({
+      first_name: body.first_name,
+      last_name: body.last_name,
+      phone_number: body.phone_number,
+      password: '123456',
+      role: 'applicant',
+      email: body.email,
+    });
+  }
+
+  const application = await Application.create(
+    {
+      resume_url: body.resume_url,
+      user_id: user.id,
+      job_id: job.id,
+      description: body.description,
+    },
+    {
+      include: [
+        {
+          model: User,
+          as: 'user',
+        },
+        {
+          model: Job,
+          as: 'job',
+        },
+      ],
+    },
+  );
+
+  return jsonResponse({
+    res,
+    status: statusCodes.CREATED,
+    message:
+      'An application has been sent successfully, we will reachout in case we feel you are a great fit.',
+    data: {
+      ...application.get(),
     },
   });
 });
