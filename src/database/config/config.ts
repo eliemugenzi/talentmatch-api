@@ -1,28 +1,39 @@
-const common = {
-  use_env_variable: 'DATABASE_URL',
-  dialect: 'postgres',
-  logging: false,
-  seederStorage: 'sequelize',
-  pool: {
-    max: 5,
-    min: 0,
-    acquire: 60000,
-    idle: 10000,
-  }
-}
+const pool = {
+  max: 5,
+  min: 0,
+  acquire: 60000,
+  idle: 10000,
+};
 
-module.exports = {
+const config: any = {
   development: {
-    ...common,
+    use_env_variable: 'DATABASE_URL',
+    dialect: 'postgres',
+    logging: false,
+    seederStorage: 'sequelize',
+    pool,
   },
   test: {
-    ...common,
     use_env_variable: 'DATABASE_URL_TEST',
+    dialect: 'postgres',
+    logging: false,
+    seederStorage: 'sequelize',
+    pool,
   },
   staging: {
-    ...common,
+    logging: false,
+    use_env_variable: 'DATABASE_URL',
+    dialect: 'postgres',
+    seederStorage: 'sequelize',
+    pool,
   },
   production: {
-    ...common,
+    logging: false,
+    use_env_variable: 'DATABASE_URL',
+    dialect: 'postgres',
+    seederStorage: 'sequelize',
+    pool,
   },
 };
+
+export default config;
