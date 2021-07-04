@@ -33,6 +33,9 @@ const config = {
     dialect: 'postgres',
     seederStorage: 'sequelize',
     pool,
+    dialectOptions: {
+      ssl: true,
+    },
   },
 };
 
