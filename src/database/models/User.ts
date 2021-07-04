@@ -1,4 +1,5 @@
 import { Model, DataTypes } from 'sequelize';
+import bcrypt from 'bcryptjs';
 import { sequelize } from '.';
 
 import Application from 'models/Application';
@@ -68,5 +69,11 @@ User.init(
     updatedAt: 'updated_at',
   },
 );
+
+User.beforeCreate((data) => {
+  if (data.password) {
+    data.password = bcrypt.hashSync(data.password, 10);
+  }
+});
 
 export default User;

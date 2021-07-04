@@ -2,35 +2,23 @@
 
 module.exports = {
   up: (queryInterface, Sequelize) => {
-    return queryInterface.createTable('users', {
+    return queryInterface.createTable('tokens', {
       id: {
         type: Sequelize.BIGINT,
         allowNull: false,
         primaryKey: true,
         autoIncrement: true,
       },
-      first_name: {
-        type: Sequelize.STRING,
+      user_id: {
+        type: Sequelize.BIGINT,
       },
-      last_name: {
-        type: Sequelize.STRING,
+      token: {
+        type: Sequelize.TEXT,
+        allowNull: false,
       },
       status: {
         type: Sequelize.STRING,
-        defaultValue: 'inactive',
-      },
-      phone_number: {
-        type: Sequelize.STRING,
-      },
-      email: {
-        type: Sequelize.STRING,
-      },
-      role: {
-        type: Sequelize.STRING,
-        defaultValue: 'applicant',
-      },
-      password: {
-        type: Sequelize.STRING,
+        defaultValue: 'active',
       },
       created_at: {
         type: Sequelize.DATE,
@@ -44,6 +32,6 @@ module.exports = {
   },
 
   down: (queryInterface, Sequelize) => {
-    return queryInterface.dropTable('users');
+    return queryInterface.dropTable('tokens');
   },
 };

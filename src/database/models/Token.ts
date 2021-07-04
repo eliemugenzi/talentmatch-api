@@ -1,53 +1,42 @@
 import { Model, DataTypes } from 'sequelize';
 import { sequelize } from '.';
+import User from './User';
 
-import User from 'models/User';
-
-/**
- * Application Class Model
- */
-class Application extends Model {
+class Token extends Model {
   public id!: number;
-  public resume_url!: string;
-  public status!: 'passed' | 'dropped' | 'pending';
   public user_id!: number;
-  public job_id!: number;
-  public description!: string;
+  public token!: string;
+  public status!: 'active' | 'expired';
 
   public readonly user?: User;
   public readonly created_at!: Date;
   public readonly updated_at!: Date;
 }
 
-Application.init(
+Token.init(
   {
     id: {
-      allowNull: false,
-      autoIncrement: true,
-      primaryKey: true,
       type: DataTypes.BIGINT,
+      allowNull: false,
+      primaryKey: true,
+      autoIncrement: true,
     },
-    resume_url: {
+    user_id: {
       type: DataTypes.STRING,
       allowNull: false,
     },
-    description: {
+    token: {
       type: DataTypes.TEXT,
+      allowNull: false,
     },
     status: {
       type: DataTypes.STRING,
-      defaultValue: 'pending',
-    },
-    user_id: {
-      type: DataTypes.BIGINT,
-    },
-    job_id: {
-      type: DataTypes.BIGINT,
+      defaultValue: 'active',
     },
   },
   {
     sequelize,
-    tableName: 'applications',
+    tableName: 'tokens',
     underscored: true,
     timestamps: true,
     createdAt: 'created_at',
@@ -55,4 +44,4 @@ Application.init(
   },
 );
 
-export default Application;
+export default Token;

@@ -2,6 +2,8 @@ import { Sequelize } from 'sequelize';
 
 import User from './User';
 import Application from './Application';
+import Token from './Token';
+import Job from './Job';
 
 import 'dotenv/config';
 import DBConfig from '../config/config';
@@ -17,6 +19,21 @@ User.hasMany(Application, {
 Application.belongsTo(User, {
   as: 'user',
   foreignKey: 'user_id',
+});
+
+Token.belongsTo(User, {
+  foreignKey: 'user_id',
+  as: 'user',
+});
+
+Job.hasMany(Application, {
+  as: 'applications',
+  foreignKey: 'job_id',
+});
+
+Application.belongsTo(Job, {
+  as: 'job',
+  foreignKey: 'job_id',
 });
 
 interface Database {

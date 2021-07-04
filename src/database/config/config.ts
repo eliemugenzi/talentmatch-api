@@ -37,3 +37,5 @@ const config: any = {
 };
 
 export default config;
+
+// module.exports = config;
