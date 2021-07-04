@@ -34,7 +34,10 @@ const config = {
     seederStorage: 'sequelize',
     pool,
     dialectOptions: {
-      ssl: true,
+      ssl: {
+        require: true,
+        rejectUnauthorized: false,
+      },
     },
   },
 };
