@@ -1,4 +1,4 @@
-import { Response } from 'express';
+import { NextFunction, Response } from 'express';
 import { Op } from 'sequelize';
 import asyncHandler from 'middlewares/asyncHandler';
 import jsonResponse from 'helpers/jsonResponse';
@@ -6,7 +6,7 @@ import jsonResponse from 'helpers/jsonResponse';
 import Application from 'models/Application';
 import User from 'models/User';
 import Job from 'models/Job';
-import { OK } from 'constants/statusCodes';
+import { NOT_FOUND, OK } from 'constants/statusCodes';
 
 export const getMany = asyncHandler(async (req: any, res: Response) => {
   const {
@@ -69,3 +69,64 @@ export const getMany = asyncHandler(async (req: any, res: Response) => {
     },
   });
 });
+
+export const checkApplication = asyncHandler(
+  async (req: any, res: Response, next: NextFunction): Promise<any> => {
+    const { params } = req;
+
+    const foundApplication = await Application.findByPk(params.id, {
+      include: [
+        {
+          model: User,
+          as: 'user',
+        },
+        {
+          model: Job,
+          as: 'job',
+        },
+      ],
+    });
+
+    if (!foundApplication) {
+      return jsonResponse({
+        res,
+        status: NOT_FOUND,
+        message: 'The application you are looking for is not found',
+      });
+    }
+
+    req.application = foundApplication;
+
+    return next();
+  },
+);
+
+export const getOne = asyncHandler(async (req: any, res: Response) => {
+  const { application } = req;
+
+  return jsonResponse({
+    res,
+    status: OK,
+    data: {
+      ...application?.get(),
+    },
+  });
+});
+
+export const changeStatus = ({ status }: { status: 'dropped' | 'passed' }): any =>
+  asyncHandler(async (req: any, res: Response): Promise<Response> => {
+    const { application } = req;
+
+    await application?.update({
+      status,
+    });
+
+    return jsonResponse({
+      res,
+      status: OK,
+      message: 'Application has been updated',
+      data: {
+        ...application?.get(),
+      },
+    });
+  });
