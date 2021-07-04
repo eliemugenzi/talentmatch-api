@@ -1,5 +1,6 @@
 import { Model, DataTypes } from 'sequelize';
 import { sequelize } from '.';
+import Application from './Application';
 
 /**
  * Job Class Model
@@ -11,6 +12,7 @@ class Job extends Model {
   public description!: string;
   public status!: 'open' | 'closed';
 
+  public readonly applications?: Application[];
   public readonly created_at!: Date;
   public readonly updated_at!: Date;
 }
