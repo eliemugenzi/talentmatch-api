@@ -2,35 +2,23 @@
 
 module.exports = {
   up: (queryInterface, Sequelize) => {
-    return queryInterface.createTable('users', {
+    return queryInterface.createTable('jobs', {
       id: {
         type: Sequelize.BIGINT,
-        allowNull: false,
+        allowNull: true,
         primaryKey: true,
         autoIncrement: true,
       },
-      first_name: {
+      title: {
         type: Sequelize.STRING,
+        allowNull: false,
       },
-      last_name: {
-        type: Sequelize.STRING,
+      description: {
+        type: Sequelize.TEXT,
       },
       status: {
         type: Sequelize.STRING,
-        defaultValue: 'inactive',
-      },
-      phone_number: {
-        type: Sequelize.STRING,
-      },
-      email: {
-        type: Sequelize.STRING,
-      },
-      role: {
-        type: Sequelize.STRING,
-        defaultValue: 'applicant',
-      },
-      password: {
-        type: Sequelize.STRING,
+        defaultValue: 'open',
       },
       created_at: {
         type: Sequelize.DATE,
@@ -44,6 +32,6 @@ module.exports = {
   },
 
   down: (queryInterface, Sequelize) => {
-    return queryInterface.dropTable('users');
+    return queryInterface.dropTable('jobs');
   },
 };

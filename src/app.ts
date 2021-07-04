@@ -1,5 +1,5 @@
 import 'dotenv/config';
-import express, { Application, Request, Response, NextFunction } from 'express';
+import express, { Application, Request, Response } from 'express';
 import cors from 'cors';
 import useragent from 'express-useragent';
 import requestIp from 'request-ip';
@@ -38,10 +38,14 @@ app.get('/', (req: Request, res: Response) => {
 });
 
 // Catch wrong routes
-app.use((req: Request, res: Response, next: NextFunction) => {
-  const error: ResponseError = new Error('Not found');
+app.use((req: Request, res: Response) => {
+  const error: ResponseError = new Error('Route Not found');
   error.status = NOT_FOUND;
-  next(error);
+  return jsonResponse({
+    res,
+    status: error.status,
+    message: error.message,
+  });
 });
 
 // Catch all errors
