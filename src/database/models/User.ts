@@ -1,24 +1,22 @@
 import { Model, DataTypes } from 'sequelize';
-import { v4 } from 'uuid';
+import { sequelize } from '.';
 
-import { sequelize } from './index';
+import Application from 'models/Application';
 
 /**
  * User Class Model
  */
 class User extends Model {
-  id!: number;
-  phone_number!: string;
-  password!: string;
-  id_number!: string;
-  email!: string;
-  first_name!: string;
-  middle_name!: string;
-  last_name!: string;
-  avatar!: string;
-  gender!: string;
-  status!: string; // inactive, active
+  public id!: number;
+  public password!: string;
+  public email!: string;
+  public phone_number!: string;
+  public first_name!: string;
+  public last_name!: string;
+  public status!: 'active' | 'inactive';
+  public role!: 'applicant' | 'hr';
 
+  public readonly applications?: Application[];
   public readonly created_at!: Date;
   public readonly updated_at!: Date;
 }
@@ -31,12 +29,14 @@ User.init(
       primaryKey: true,
       type: DataTypes.BIGINT,
     },
-    avatar: DataTypes.STRING,
     email: {
       type: DataTypes.STRING,
       allowNull: true,
     },
-   
+    phone_number: {
+      type: DataTypes.STRING,
+    },
+
     password: {
       type: DataTypes.STRING,
       allowNull: false,
@@ -49,18 +49,18 @@ User.init(
       type: DataTypes.STRING,
       allowNull: false,
     },
-    middle_name: DataTypes.STRING,
-    gender: DataTypes.STRING,
-    phone_number: {
-      type: DataTypes.STRING,
-    },
+
     status: {
       type: DataTypes.STRING,
       defaultValue: 'active',
     },
+    role: {
+      type: DataTypes.STRING,
+      defaultValue: 'applicant',
+    },
   },
   {
-    sequelize: sequelize,
+    sequelize,
     tableName: 'users',
     underscored: true,
     timestamps: true,
