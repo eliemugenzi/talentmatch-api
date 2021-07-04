@@ -5,7 +5,7 @@ const pool = {
   idle: 10000,
 };
 
-const config: any = {
+const config = {
   development: {
     use_env_variable: 'DATABASE_URL',
     dialect: 'postgres',
