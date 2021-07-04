@@ -2,6 +2,7 @@ import { Model, DataTypes } from 'sequelize';
 import { sequelize } from '.';
 
 import User from 'models/User';
+import Job from './Job';
 
 /**
  * Application Class Model
@@ -15,6 +16,7 @@ class Application extends Model {
   public description!: string;
 
   public readonly user?: User;
+  public readonly job?: Job;
   public readonly created_at!: Date;
   public readonly updated_at!: Date;
 }
